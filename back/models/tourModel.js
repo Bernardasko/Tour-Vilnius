@@ -5,23 +5,23 @@ const Category = require("./categoryModel");
 const tourSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true,
+   
   },
   photo: {
     type: String,
-    required: true,
+  
   },
   duration: {
     type: Number,
-    required: true,
+   
   },
   dates: {
-    type: Date,
-    required: true,
+    type: String,
+   
   },
   price: {
     type: Number,
-    required: true,
+  
   },
   rating: {
     type: Number,
@@ -31,18 +31,23 @@ const tourSchema = new mongoose.Schema({
     type: String,
   },
   category: {
+    type: String,
+    // enum: ["Solo", "Group"], 
+    // required: [true, "Category is required"]
+  },
+  categorys: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
   }
 });
 
-tourSchema.methods.calculateAverageRating = function() {
-    let sum = 0;
-    for (let i = 0; i < this.ratings.length; i++) {
-      sum += this.ratings[i];
-    }
-    return sum / this.ratings.length;
-  };
+// tourSchema.methods.calculateAverageRating = function() {
+//     let sum = 0;
+//     for (let i = 0; i < this.ratings.length; i++) {
+//       sum += this.ratings[i];
+//     }
+//     return sum / this.ratings.length;
+//   };
 
 const Tour = mongoose.model("Tour", tourSchema);
 module.exports = Tour;
