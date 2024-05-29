@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -8,27 +8,29 @@ import {
   MenuItem,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useForm, Controller } from "react-hook-form";
 import { postData } from "../services/post";
+// import { useContext } from 'react';
+// import { StateContext } from '../utils/StateContext';
 import { styled } from "@mui/material/styles";
 import dayjs from "dayjs";
 
 function TourForms() {
+
   const {
     control,
     register,
     handleSubmit,
+    reset,
     formState: { errors },
-    setValue,
-    reset
   } = useForm({
     defaultValues: {
       title: "",
       photo: "",
       duration: "",
-      dates: null,
+      dates: "",
       price: "",
       description: "",
       category: "",
@@ -38,8 +40,8 @@ function TourForms() {
   const formSubmitHandler = async (data) => {
     data.dates = dayjs(data.dates).format("YYYY-MM-DD");
     try {
+      await postData({ ...data, photo: data.photo[0] });
       reset();
-      await postData(data);
     } catch (error) {
       console.log(error);
     }
@@ -57,12 +59,8 @@ function TourForms() {
     width: 1,
   });
 
-  const handleFileChange = (e) => {
-    setValue("photo", e.target.files[0]);
-  };
-
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box
         component="form"
         onSubmit={handleSubmit(formSubmitHandler)}
@@ -73,33 +71,41 @@ function TourForms() {
           maxWidth: 400,
           mx: "auto",
           mt: 4,
-        }}
+        }}       
       >
         <Typography variant="h4" component="h1" gutterBottom>
           Create a New Tour
         </Typography>
         <TextField
           label="Title"
-          {...register("title", { required: "Title is required" })}
+          name="title"
+          id="title"
+          autoComplete="title"
+          {...register("title", { required: true })}
           error={!!errors.title}
           helperText={errors.title?.message}
         />
         <Button
           component="label"
+          role={undefined}
           variant="contained"
+          tabIndex={-1}
           startIcon={<CloudUploadIcon />}
         >
           Upload file
           <VisuallyHiddenInput
             name="photo"
             type="file"
-            onChange={handleFileChange}
+            {...register("photo")}
           />
         </Button>
         <TextField
           label="Duration hours"
+          name="duration"
           type="number"
-          {...register("duration", { required: "Duration is required" })}
+          id="duration"
+          autoComplete="duration"
+          {...register("duration", { required: true })}
           error={!!errors.duration}
           helperText={errors.duration?.message}
         />
@@ -110,22 +116,28 @@ function TourForms() {
             <DatePicker
               label="Date"
               value={field.value}
-              format="DD-MM-YYYY"
+              inputFormat="DD-MM-YYYY"
               onChange={(date) => field.onChange(date)}
-              renderInput={(params) => <TextField {...params} required />}
+              required
             />
           )}
         />
         <TextField
           label="Price"
+          name="price"
           type="number"
-          {...register("price", { required: "Price is required" })}
+          id="price"
+          autoComplete="price"
+          {...register("price", { required: true })}
           error={!!errors.price}
           helperText={errors.price?.message}
         />
         <TextField
           label="Comment"
-          {...register("comment", { required: "Comment is required" })}
+          name="comment"
+          id="comment"
+          autoComplete="comment"
+          {...register("comment", { required: true })}
           error={!!errors.comment}
           helperText={errors.comment?.message}
           multiline
