@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
-const Category = require("./categoryModel");
 
 const tourSchema = new mongoose.Schema({
   title: {
@@ -23,10 +22,10 @@ const tourSchema = new mongoose.Schema({
     type: Number,
   
   },
-  rating: {
-    type: Number,
-    default: 0,
-  },
+  // rating: {
+  //   type: Number,
+  //   default: 0,
+  // },
   comment: {
     type: String,
   },
@@ -35,10 +34,10 @@ const tourSchema = new mongoose.Schema({
     // enum: ["Solo", "Group"], 
     // required: [true, "Category is required"]
   },
-  categorys: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Category",
-  }
+  // category: {
+  //   type: mongoose.Schema.ObjectId,
+  //   ref: "Category",
+  // }
 });
 
 // tourSchema.methods.calculateAverageRating = function() {

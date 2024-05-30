@@ -7,7 +7,7 @@ const CategorySchema = new mongoose.Schema({
   },
   tours: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.ObjectId,
       ref: "Tour",
     },
   ],

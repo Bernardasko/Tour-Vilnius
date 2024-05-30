@@ -9,6 +9,10 @@ import {
   Menu,
   MenuItem,
   MenuList,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
 } from "@mui/material";
 import ExploreIcon from "@mui/icons-material/Explore";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -17,6 +21,8 @@ import { logout, getLogedInUser } from "../utils/auth/authenticate";
 
 function Header() {
   const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElTours, setAnchorElTours] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
 
@@ -37,6 +43,56 @@ function Header() {
   const closeMenu = () => {
     setAnchorElNav(null);
   };
+
+  const openToursMenu = (event) => {
+    setAnchorElTours(event.currentTarget);
+  };
+  const closeToursMenu = () => {
+    setAnchorElTours(null);
+  };
+
+  const toggleDrawer = (open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+    setDrawerOpen(open);
+  };
+
+  const list = (
+    <Box
+      sx={{ width: 250 }}
+      role="presentation"
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
+    >
+      <List>
+        <ListItem button component={Link} to="/">
+          <ListItemText primary="Home" />
+        </ListItem>
+        <ListItem button component={Link} to="/groups">
+          <ListItemText primary="Groups" />
+        </ListItem>
+        <ListItem button component={Link} to="/solo">
+          <ListItemText primary="Solo" />
+        </ListItem>
+        <ListItem button component={Link} to="/about">
+          <ListItemText primary="About" />
+        </ListItem>
+        {loggedIn ? (
+          <ListItem button onClick={handleLogout}>
+            <ListItemText primary="Logout" />
+          </ListItem>
+        ) : (
+          <ListItem button component={Link} to="/login">
+            <ListItemText primary="Login" />
+          </ListItem>
+        )}
+      </List>
+    </Box>
+  );
 
   return (
     <AppBar position="static">
@@ -63,7 +119,20 @@ function Header() {
               Home
             </Link>
           </Button>
-          <Button color="inherit">Tours</Button>
+          <Button
+            color="inherit"
+            onClick={openToursMenu}
+          >
+            Tours
+          </Button>
+          <Menu
+            anchorEl={anchorElTours}
+            open={Boolean(anchorElTours)}
+            onClose={closeToursMenu}
+          >
+            <MenuItem component={Link} to="/groups">Groups</MenuItem>
+            <MenuItem component={Link} to="/solo">Solo</MenuItem>
+          </Menu>
           <Button color="inherit">About</Button>
           {loggedIn ? (
             <Button color="inherit" onClick={handleLogout}>
@@ -85,31 +154,17 @@ function Header() {
             fontSize="large"
             edge="start"
             color="inherit"
-            onClick={openMenu}
+            onClick={toggleDrawer(true)}
           >
             <MenuIcon />
           </IconButton>
-          <Menu
-            anchorEl={anchorElNav}
-            open={Boolean(anchorElNav)}
-            onClose={closeMenu}
-            sx={{ display: { xs: "block", md: "none" } }}
+          <Drawer
+            anchor="left"
+            open={drawerOpen}
+            onClose={toggleDrawer(false)}
           >
-            <MenuList>
-              <MenuItem component={Link} to="/">
-                Home
-              </MenuItem>
-              <MenuItem>Tours</MenuItem>
-              <MenuItem>About</MenuItem>
-              {loggedIn ? (
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-              ) : (
-                <MenuItem component={Link} to="/login">
-                  Login
-                </MenuItem>
-              )}
-            </MenuList>
-          </Menu>
+            {list}
+          </Drawer>
         </Box>
         <IconButton>
           <ExploreIcon

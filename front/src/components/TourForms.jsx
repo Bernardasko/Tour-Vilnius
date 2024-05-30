@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -12,12 +11,13 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useForm, Controller } from "react-hook-form";
 import { postData } from "../services/post";
-// import { useContext } from 'react';
-// import { StateContext } from '../utils/StateContext';
 import { styled } from "@mui/material/styles";
 import dayjs from "dayjs";
+import {ModalClose, Modal} from '@mui/joy';
+import { useState } from "react";
 
 function TourForms() {
+  const [open, setOpen] = useState(false);
 
   const {
     control,
