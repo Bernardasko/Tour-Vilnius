@@ -13,7 +13,7 @@ import { useForm, Controller } from "react-hook-form";
 import { postData } from "../services/post";
 import { styled } from "@mui/material/styles";
 import dayjs from "dayjs";
-import {ModalClose, Modal} from '@mui/joy';
+import {Sheet} from '@mui/joy';
 import { useState } from "react";
 
 function TourForms() {
@@ -60,6 +60,7 @@ function TourForms() {
   });
 
   return (
+    
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box
         component="form"

@@ -1,12 +1,13 @@
-import { Grid, CssBaseline, Button } from "@mui/material";
+
+import { Grid, CssBaseline, Button, Modal } from "@mui/material";
 import pilisImage2 from '../images/Castle2.jpg';
 import Cards from "./Cards";
 import { useContext } from "react";
 import { StateContext } from "../utils/StateContext";
+import TourForms from "./TourForms";
 
 function Home() {
     const { open, setOpen, tours } = useContext(StateContext); 
-
     return (
         <>
             <CssBaseline />
@@ -41,6 +42,9 @@ function Home() {
                     </Grid>
                 </Grid>
             </Grid>
+            <Modal open={open} onClose={() => setOpen(false)}>
+                <TourForms />
+            </Modal>
         </>
     );
 }
