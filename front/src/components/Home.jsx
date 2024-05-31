@@ -1,14 +1,12 @@
-
 import { Grid, CssBaseline, Button } from "@mui/material";
 import pilisImage2 from '../images/Castle2.jpg';
-import GroupCards from "./GroupCards";
-import SoloCards from "./SoloCards";
-import { useContext, useState } from "react";
+import Cards from "./Cards";
+import { useContext } from "react";
 import { StateContext } from "../utils/StateContext";
 
 function Home() {
+    const { open, setOpen, tours } = useContext(StateContext); 
 
-    const { open, setOpen } = useContext(StateContext);
     return (
         <>
             <CssBaseline />
@@ -24,19 +22,22 @@ function Home() {
                         height: { xs: "100vh", sm: "auto" }
                     }}
                 >
-                    <Grid >
-                    <Button sx={{ mt: 6, ml: 4, position: "absolute" }} variant="contained" onClick={() => setOpen(true)}
-                     >Create a tour</Button>
-                    <h1 style={{ color: "white",textAlign:"center" }}>Tour in Vilnius</h1>
+                    <Grid>
+                        <Button 
+                            sx={{ mt: 6, ml: 4, position: "absolute" }} 
+                            variant="contained" 
+                            onClick={() => setOpen(true)}
+                        >
+                            Create a tour
+                        </Button>
+                        <h1 style={{ color: "white", textAlign: "center" }}>Tour in Vilnius</h1>
                     </Grid>
-                    <Grid container justifyContent="center" alignItems="center" spacing={2}
-                        mt={10}>
-                        <Grid item>
-                            <GroupCards />
-                        </Grid>
-                        <Grid item>
-                            <SoloCards />
-                        </Grid>
+                    <Grid container justifyContent="center" alignItems="center" spacing={2} mt={10}>
+                        {tours && tours.map(tour => ( 
+                            <Grid item key={tour._id}>
+                                <Cards tour={tour} />
+                            </Grid>
+                        ))}
                     </Grid>
                 </Grid>
             </Grid>
