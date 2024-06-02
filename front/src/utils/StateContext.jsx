@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
-import { getallData } from '../services/get';
+import { getallData, getCategories } from '../services/get';
 export const StateContext = createContext();
 
 export const StateProvider = ({ children }) => {
@@ -7,6 +7,7 @@ export const StateProvider = ({ children }) => {
     const [tours, setTours] = useState([]);
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState("");
+    const [update, setUpdate] = useState(0);
 
     const handleOpen = () => {
         setOpen(true);
@@ -25,7 +26,7 @@ export const StateProvider = ({ children }) => {
     //Categories
     const fetchCategories = async () => {
         try {
-            const { data: { categories } } = await getallData();
+            const { data: { categories } } = await getCategories();
             setCategories(categories);
             console.log(categories);
         } catch (error) {
@@ -36,10 +37,10 @@ export const StateProvider = ({ children }) => {
     useEffect(() => {
         fetchData();
         fetchCategories();
-    }, [])
+    }, [update])
 
     return (
-        <StateContext.Provider value={{ open, setOpen, tours, setTours, categories, handleOpen}}>
+        <StateContext.Provider value={{ update, setUpdate, open, setOpen, tours, setTours, categories, setCategories, handleOpen}}>
             {children}
         </StateContext.Provider>
     )

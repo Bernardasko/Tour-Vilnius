@@ -13,7 +13,7 @@ export default function Cards({ tour }) {
           {tour.title} 
         </Typography>
         <Typography variant="body2" color="text.secondary" textAlign={"center"}>
-          {tour.description} 
+          {/* {tour.description}  */}
         </Typography>
       </CardContent>
       <CardActions sx={{ display: "flex", justifyContent: "center" }}>

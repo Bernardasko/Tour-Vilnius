@@ -29,15 +29,15 @@ const tourSchema = new mongoose.Schema({
   comment: {
     type: String,
   },
-  category: {
-    type: String,
-    // enum: ["Solo", "Group"], 
-    // required: [true, "Category is required"]
-  },
   // category: {
-  //   type: mongoose.Schema.ObjectId,
-  //   ref: "Category",
-  // }
+  //   type: String,
+  //   // enum: ["Solo", "Group"], 
+  //   // required: [true, "Category is required"]
+  // },
+  category: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Category",
+  }
 });
 
 // tourSchema.methods.calculateAverageRating = function() {

@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-  Select,
-  MenuItem,
+import {Box,Button, TextField, Typography, Select, MenuItem,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -13,11 +7,12 @@ import { useForm, Controller } from "react-hook-form";
 import { postData } from "../services/post";
 import { styled } from "@mui/material/styles";
 import dayjs from "dayjs";
-import {Sheet} from '@mui/joy';
-import { useState } from "react";
+import { ModalClose, Sheet } from '@mui/joy';
+import { useContext } from "react";
+import { StateContext } from "../utils/StateContext";
 
 function TourForms() {
-  const [open, setOpen] = useState(false);
+   const {setUpdate, setOpen, categories} = useContext(StateContext);
 
   const {
     control,
@@ -41,6 +36,8 @@ function TourForms() {
     data.dates = dayjs(data.dates).format("YYYY-MM-DD");
     try {
       await postData({ ...data, photo: data.photo[0] });
+      setUpdate((update) => update + 1);
+      setOpen(false);
       reset();
     } catch (error) {
       console.log(error);
@@ -60,20 +57,31 @@ function TourForms() {
   });
 
   return (
-    
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box
         component="form"
         onSubmit={handleSubmit(formSubmitHandler)}
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          maxWidth: 400,
-          mx: "auto",
-          mt: 4,
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            maxWidth: 500,
+            mx: "auto",
+            mt: 3,
         }}       
       >
+        <Sheet
+              variant="outlined"
+              sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 2,
+                  borderRadius: 'md',
+                  p: 3,
+                  boxShadow: 'lg',
+                }}
+            >
+                <ModalClose variant="plain" sx={{ m: 1 }} />
         <Typography variant="h4" component="h1" gutterBottom>
           Create a New Tour
         </Typography>
@@ -157,14 +165,18 @@ function TourForms() {
               <MenuItem value="" disabled>
                 Select Category
               </MenuItem>
-              <MenuItem value="Solo">Solo</MenuItem>
-              <MenuItem value="Groups">Groups</MenuItem>
+              {categories.map((category) => (
+                <MenuItem key={category._id} value={category._id}>
+                  {category.title}
+                </MenuItem>
+              ))}
             </Select>
           )}
         />
         <Button type="submit" variant="contained" color="primary">
           Submit
         </Button>
+    </Sheet>
       </Box>
     </LocalizationProvider>
   );

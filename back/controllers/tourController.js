@@ -1,4 +1,5 @@
  const Tour = require("../models/tourModel");
+ const Category = require("../models/categoryModel");
  const multer = require("multer");
 
  const storage = multer.diskStorage({
@@ -52,6 +53,10 @@ exports.getTour = async (req, res) => {
 exports.createTour = async (req, res) => {
   try {
     const newTour = await Tour.create({...req.body, photo: `/images/${req.file.originalname}`});
+
+    await Category.findByIdAndUpdate(req.body.category, {
+      $push: {tours: newTour._id},
+    });
     res.status(201).json({
       status: "success",
       data: {
