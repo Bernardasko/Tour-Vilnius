@@ -12,7 +12,7 @@ function Home() {
   return (
     <>
       <CssBaseline />
-      <Grid container component={"main"} sx={{ height: "100vh" }}>
+      <Grid container component={"main"} sx={{ height: "93vh" }}>
         <Grid
           item
           xs={12}
@@ -21,7 +21,7 @@ function Home() {
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
             backgroundPosition: "center",
-            height: { xs: "100vh", sm: "auto" },
+            height: { xs: "93.9vh", sm: "auto" },
           }}
         >
           <Grid>

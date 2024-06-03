@@ -4,7 +4,7 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import NotFoundPage from './pages/NotFoundPage';
-import ToursInfo from './components/ToursInfo';
+import ToursInfoPages from './pages/ToursInfoPages';
 
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
           <Route index path='/' element={<HomePage/>} />
           <Route path="/login" element={<LoginPage/>} />
           <Route path="/register" element={<RegisterPage/>} />
-          <Route path="/tours/:id" element={<ToursInfo/>} />
+          <Route path="/tours/:id" element={<ToursInfoPages/>} />
           <Route path="*" element={<NotFoundPage/>}/>
         </Routes>
       </StateProvider>

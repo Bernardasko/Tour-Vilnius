@@ -56,7 +56,7 @@ exports.createTour = async (req, res) => {
     if (req.file) {
       images = `/images/${req.file.originalname}`;
     } else {
-      images = ''; // or set it to a default image if needed
+      images = ''; 
     }
     const newTour = await Tour.create({...req.body, photo: images});
 
@@ -97,9 +97,36 @@ exports.updateTour = async (req, res) => {
   }
 }
 
+// exports.deleteTour = async (req, res) => {
+//   try {
+//     await Tour.findByIdAndDelete(req.params.id);
+//     res.status(204).json({
+//       status: "success",
+//       data: null,
+//     });
+//   } catch (err) {
+//     res.status(404).json({
+//       status: "fail",
+//       message: err.message,
+//     });
+//   }
+// }
 exports.deleteTour = async (req, res) => {
   try {
+    const tour = await Tour.findById(req.params.id);
+
+    if (!tour) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Tour not found",
+      });
+    }
     await Tour.findByIdAndDelete(req.params.id);
+
+    await Category.findByIdAndUpdate(tour.category, {
+      $pull: { tours: req.params.id },
+    });
+
     res.status(204).json({
       status: "success",
       data: null,
@@ -110,4 +137,4 @@ exports.deleteTour = async (req, res) => {
       message: err.message,
     });
   }
-}
+};

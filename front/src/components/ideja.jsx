@@ -1,46 +1,98 @@
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { StateContext } from "../utils/StateContext";
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
 import { useParams } from "react-router-dom";
-import '../styles/excursionInfo.css';
+import { Container, Grid, Typography, Card, CardMedia, CardContent, Box, Button, CssBaseline} from '@mui/material';
+import Modal from "@mui/joy/Modal";
+import { deleteData } from "../services/delete";
+import { useNavigate } from "react-router-dom";
+import EditToursInfo from "./EditToursInfo";
+import pilisImage2 from "../images/Castle2.jpg";
 
-function ExcursionInfo() {
-  const [allExcursions, setAllExcursions] = useState([]);
-  const { excursions, error } = useContext(StateContext);
+function ToursInfo() {
+  const [allTours, setAllTours] = useState([]);
+  const { tours, categories, setUpdate, open, setOpen } =
+    useContext(StateContext);
   const { id } = useParams();
-  const fexcursions = allExcursions.find((excursion) => excursion._id === id);
+  const ftours = allTours.find((tour) => tour._id === id);
+  const navigate = useNavigate();
+
+  const handleDelete = async () => {
+    try {
+      await deleteData(id);
+      setUpdate((update) => update + 1);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    setAllExcursions(excursions);
-  }, [excursions]);
-  console.log(fexcursions);
+    setAllTours(tours);
+  }, [tours]);
+
+  const getCategoryTitle = (categoryId) => {
+    const category = categories.find((cat) => cat._id === categoryId);
+    return category ? category.title : "Unknown Category";
+  };
+
   return (
     <>
-    {fexcursions && 
-    <div>
-      <div className="cardBckgr">
-      <h4>{fexcursions.name}</h4>
-      <p> <b>Duration </b>(hours): {fexcursions.duration}</p>
-
-      <p><b>Price</b> (EUR):  {fexcursions.price}</p>
-      <p><b>Start Date:</b> {fexcursions.dates}</p>
-      <p><b>Start Time:</b> {fexcursions.time}</p>  
-      <p>
-        <b>Description:</b> {fexcursions.description}
-      </p>
-      <p><b>Category:</b> {fexcursions.category}</p>
-
-      </div>
-    </div>
-    }
-
-            {/* <Link to={`/${excursion._id}`}> 
-            <Button className="loginBtnForm">More information</Button>
-            </ Link> */}
-
+    <CssBaseline />
+      {ftours && (
+        <Container style={{ width: '100%', marginTop: 20 }}>
+        <Card>
+          <Grid container>
+            <Grid item xs={6}>
+              <CardMedia
+                component="img"
+                image={ftours.photo}
+                alt="Photo"
+                style={{ height: '100%', width: '100%' }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <CardContent>
+                <Box sx={{ padding: 2 }}>
+                  <Typography variant="h4" component="div" gutterBottom>
+                    Tour Information
+                  </Typography>
+                  <Typography variant="body1" component="div" gutterBottom>
+                    <strong>Duration:</strong> {ftours.duration} days
+                  </Typography>
+                  <Typography variant="body1" component="div" gutterBottom>
+                    <strong>Dates:</strong> {ftours.dates}
+                  </Typography>
+                  <Typography variant="body1" component="div" gutterBottom>
+                    <strong>Price:</strong> ${ftours.price}
+                  </Typography>
+                  <Typography variant="body1" component="div" gutterBottom>
+                    <strong>Comment:</strong> {ftours.comment}
+                  </Typography>
+                  <Typography variant="body1" component="div" gutterBottom>
+                    <strong>Category:</strong> {getCategoryTitle(ftours.category)}
+                  </Typography>
+                  <Box sx={{ marginTop: 2 }}>
+                    <Button variant="contained" color="primary" onClick={() => setOpen(true)} style={{ marginRight: 10 }}>
+                      Edit
+                    </Button>
+                    <Button variant="contained" color="secondary"   onClick={handleDelete}>
+                      Delete
+                    </Button>
+                  </Box>
+                </Box>
+              </CardContent>
+            </Grid>
+          </Grid>
+        </Card>
+      </Container>
+      )}
+      <Modal open={open} onClose={() => setOpen(false)}>
+        <div>
+          <EditToursInfo tour={ftours} />
+        </div>
+      </Modal>
     </>
   );
 }
 
-export default ExcursionInfo;
+export default ToursInfo;
