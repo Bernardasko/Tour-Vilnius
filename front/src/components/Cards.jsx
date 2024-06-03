@@ -1,4 +1,5 @@
 import { Card, CardContent, CardActions, CardMedia, Button, Typography } from '@mui/material';
+import { Link } from 'react-router-dom'; 
 
 export default function Cards({ tour }) {
   return (
@@ -17,7 +18,9 @@ export default function Cards({ tour }) {
         </Typography>
       </CardContent>
       <CardActions sx={{ display: "flex", justifyContent: "center" }}>
+        <Link to = {`/tours/${tour._id}`}>
         <Button size="large">More</Button>
+        </Link>
       </CardActions>
     </Card>
   );

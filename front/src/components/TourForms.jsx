@@ -33,7 +33,7 @@ function TourForms() {
   });
 
   const formSubmitHandler = async (data) => {
-    data.dates = dayjs(data.dates).format("YYYY-MM-DD");
+    data.dates = dayjs(data.dates).format("MM/DD/YYYY");
     try {
       await postData({ ...data, photo: data.photo[0] });
       setUpdate((update) => update + 1);
@@ -125,8 +125,9 @@ function TourForms() {
             <DatePicker
               label="Date"
               value={field.value}
-              inputFormat="DD-MM-YYYY"
-              onChange={(date) => field.onChange(date)}
+              format="MM/dd/yyyy"
+                onChange={(date) => field.onChange(date)}
+                renderInput={(params) => <TextField {...params} />}
               required
             />
           )}

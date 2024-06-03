@@ -9,7 +9,7 @@ export const postData = async (data) => {
         },
     });
     return response.data;
-}
+} 
 
 // export const postData = async (formData) => {
 //     try {

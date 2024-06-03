@@ -52,7 +52,13 @@ exports.getTour = async (req, res) => {
 
 exports.createTour = async (req, res) => {
   try {
-    const newTour = await Tour.create({...req.body, photo: `/images/${req.file.originalname}`});
+    let images;
+    if (req.file) {
+      images = `/images/${req.file.originalname}`;
+    } else {
+      images = ''; // or set it to a default image if needed
+    }
+    const newTour = await Tour.create({...req.body, photo: images});
 
     await Category.findByIdAndUpdate(req.body.category, {
       $push: {tours: newTour._id},

@@ -28,7 +28,6 @@ export const StateProvider = ({ children }) => {
         try {
             const { data: { categories } } = await getCategories();
             setCategories(categories);
-            console.log(categories);
         } catch (error) {
             console.log(error);
         }
