@@ -79,10 +79,24 @@ exports.createTour = async (req, res) => {
 
 exports.updateTour = async (req, res) => {
   try {
-    const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+    const updateData = { ...req.body };
+
+    if (req.file) {
+      updateData.photo = `/images/${req.file.originalname}`;
+    }
+
+    const tour = await Tour.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
       runValidators: true,
     });
+
+    if (!tour) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Tour not found",
+      });
+    }
+
     res.status(200).json({
       status: "success",
       data: {
@@ -95,7 +109,7 @@ exports.updateTour = async (req, res) => {
       message: err.message,
     });
   }
-}
+};
 
 // exports.deleteTour = async (req, res) => {
 //   try {

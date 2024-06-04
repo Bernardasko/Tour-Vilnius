@@ -3,7 +3,12 @@ const API_URL = import.meta.env.VITE_API_URL;
 const API_URC = import.meta.env.VITE_API_URC;
 
 export const updateData = async (id, data) => {
-  const response = await axios.patch(`${API_URL}/${id}`, data);
+  const response = await axios.patch(`${API_URL}/${id}`, data,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   return response.data;
 };
 

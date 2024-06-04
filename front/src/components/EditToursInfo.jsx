@@ -44,7 +44,7 @@ function EditToursInfo({ tour }) {
     const formSubmitHandler = async (data) => {
         data.dates = dayjs(data.dates).format("MM/DD/YYYY");
         try {
-                await updateData(tour._id, data);
+            await updateData(tour._id, { ...data, photo: data.photo[0] });
                 setUpdate((update) => update + 1);
                 setOpen(false);
                 reset();
@@ -56,7 +56,7 @@ function EditToursInfo({ tour }) {
     useEffect(() => {
         if (tour) {
             setValue("title", tour.title);
-            setValue("photo", tour.photo);
+            // setValue("photo", tour.photo[0]);
             setValue("duration", tour.duration);
             setValue("dates", dayjs(tour.dates, "MM/DD/YYYY").toDate());
             setValue("price", tour.price);

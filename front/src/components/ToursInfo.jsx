@@ -1,16 +1,16 @@
 import { useState, useEffect, useContext } from "react";
 import { StateContext } from "../utils/StateContext";
 import { useParams } from "react-router-dom";
-import { Container, Grid, Typography, Card, CardMedia, CardContent, Box, Button, CssBaseline } from '@mui/material';
+import { Container, Grid, Typography, Card, CardMedia, CardContent, Box, Button, CssBaseline, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import Modal from "@mui/joy/Modal";
 import { deleteData } from "../services/delete";
 import { useNavigate } from "react-router-dom";
 import EditToursInfo from "./EditToursInfo";
 import pilisImage2 from "../images/Castle2.jpg";
-import { height } from "@mui/system";
 
 function ToursInfo() {
   const [allTours, setAllTours] = useState([]);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const { tours, categories, setUpdate, open, setOpen } = useContext(StateContext);
   const { id } = useParams();
   const ftours = allTours.find((tour) => tour._id === id);
@@ -23,6 +23,8 @@ function ToursInfo() {
       navigate("/");
     } catch (error) {
       console.log(error);
+    } finally {
+      setOpenDeleteDialog(false);
     }
   };
 
@@ -84,7 +86,7 @@ function ToursInfo() {
                         <Button variant="contained" color="primary" onClick={() => setOpen(true)} style={{ marginRight: 10 }}>
                           Edit
                         </Button>
-                        <Button variant="contained" color="secondary" onClick={handleDelete}>
+                        <Button variant="contained" color="secondary" onClick={() => setOpenDeleteDialog(true)}>
                           Delete
                         </Button>
                       </Box>
@@ -101,6 +103,27 @@ function ToursInfo() {
           <EditToursInfo tour={ftours} />
         </div>
       </Modal>
+      <Dialog
+        open={openDeleteDialog}
+        onClose={() => setOpenDeleteDialog(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Confirm Delete"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this tour?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDeleteDialog(false)} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDelete} color="secondary" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
