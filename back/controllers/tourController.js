@@ -85,6 +85,15 @@ exports.updateTour = async (req, res) => {
       updateData.photo = `/images/${req.file.originalname}`;
     }
 
+    await Category.updateMany(
+      {tours: req.params.id},
+      {$pull: {tours: req.params.id}}
+     );
+  
+      await Category.findByIdAndUpdate(req.body.category, {
+        $push: {tours: req.params.id},
+      });
+
     const tour = await Tour.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
       runValidators: true,
