@@ -24,7 +24,6 @@ function Copyright(props) {
 
 
 export default function SignUpSide() {
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
 
@@ -46,7 +45,7 @@ export default function SignUpSide() {
       await signup(values);
       navigate("/login");
     } catch (error) {
-      setError(error.response.data.message);
+      console.log(error);
     }
   }
 
@@ -91,7 +90,7 @@ export default function SignUpSide() {
               name="name"
               autoComplete="name"
               autoFocus
-              {...register("name", { required: true })}
+              {...register("name", { required: "Please enter your name" })}
               error={!!errors.name}
               helperText={errors.name?.message}
             />
@@ -103,7 +102,7 @@ export default function SignUpSide() {
               label="Email Address"
               name="email"
               autoComplete="email"
-              {...register("email", { required: true })}
+              {...register("email", { required: "Please enter your email" })}
               error={!!errors.email}
               helperText={errors.email?.message}
             />
@@ -116,7 +115,7 @@ export default function SignUpSide() {
               type="password"
               id="password"
               autoComplete="new-password"
-              {...register("password", { required: true })}
+              {...register("password", { required: "Please enter your password" })}
               error={!!errors.password}
               helperText={errors.password?.message}
             />
@@ -129,7 +128,7 @@ export default function SignUpSide() {
               type="password"
               id="passwordConfirm"
               autoComplete="new-password"
-              {...register("passwordConfirm", { required: true })}
+              {...register("passwordConfirm", { required: "Please confirm your password" })}
               error={!!errors.passwordConfirm}
               helperText={errors.passwordConfirm?.message}
             />

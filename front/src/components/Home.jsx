@@ -5,10 +5,14 @@ import { useContext } from "react";
 import { StateContext } from "../utils/StateContext";
 import TourForms from "./TourForms";
 import Modal from '@mui/joy/Modal';
+import { getLogedInUser } from "../utils/auth/authenticate";
 
 
 function Home() {
   const { open, setOpen, tours, setUpdate } = useContext(StateContext);
+
+  const user = getLogedInUser();
+  const isAdmin = user?.data.role === 'admin';
   return (
     <>
       <CssBaseline />
@@ -25,13 +29,15 @@ function Home() {
           }}
         >
           <Grid>
-            <Button
-              sx={{ mt: 6, ml: 4, position: "absolute" }}
-              variant="contained"
-              onClick={() => setOpen(true)}
-            >
-              Create a tour
-            </Button>
+            {isAdmin && (
+              <Button
+                sx={{ mt: 6, ml: 4, position: "absolute" }}
+                variant="contained"
+                onClick={() => setOpen(true)}
+              >
+                Create a tour
+              </Button>
+            )}
             <h1 style={{ color: "white", textAlign: "center" }}>
               Tour in Vilnius
             </h1>

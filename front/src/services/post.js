@@ -1,8 +1,10 @@
 import axios from "axios";
+import { authenticate } from "../utils/auth/authenticate";
 const API_URL = import.meta.env.VITE_API_URL;
 
 
 export const postData = async (data) => {
+    authenticate();
     const response = await axios.post(API_URL, data, {
         headers: {
             "Content-Type": "multipart/form-data",

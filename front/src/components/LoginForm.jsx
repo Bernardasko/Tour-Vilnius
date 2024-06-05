@@ -2,7 +2,7 @@ import { Avatar, Button, CssBaseline, TextField, FormControlLabel, Checkbox,  Pa
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import pilisImage from '../images/pilis.jpg';
 import { Link, useNavigate } from 'react-router-dom';
-import {login} from '../utils/auth/authenticate';
+import { login } from '../utils/auth/authenticate';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 
@@ -21,9 +21,8 @@ function Copyright(props) {
 }
 
 export default function SignInSide() {
-  const [error, setError] = useState("");
-
   const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   const {
     handleSubmit,
@@ -38,10 +37,11 @@ export default function SignInSide() {
 
   async function onSubmit(values) {
     try {
-     await login(values);
-     navigate("/");
+      await login(values);
+      navigate("/");
     } catch (err) {
-      setError(err.response.data.message);
+      console.log(err);
+      setError("Wrong email or password");
     }
   }
 
@@ -86,8 +86,12 @@ export default function SignInSide() {
               name="email"
               autoComplete="email"
               autoFocus
-              {...register("email", { required: true })}
-              onError={!!errors.email}
+              {...register("email", { required: "Please enter your email",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "Invalid email address format",
+              } })}
+              error={!!errors.email}
               helperText={errors.email?.message}
             />
             <TextField
@@ -99,8 +103,9 @@ export default function SignInSide() {
               type="password"
               id="password"
               autoComplete="current-password"
-              {...register("password", { required: true })}
-              onError={!!errors.password}
+              {...register("password",
+               { required: "Please enter your password", })}
+              error={!!errors.password}
               helperText={errors.password?.message}
             />
             <FormControlLabel
@@ -115,6 +120,7 @@ export default function SignInSide() {
             >
               Sign In
             </Button>
+            {error && <div style={{ color: "red" }}>{error}</div>}
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
@@ -127,7 +133,6 @@ export default function SignInSide() {
                 </Link>
               </Grid>
             </Grid>
-            <Copyright sx={{ mt: 5 }} />
           </Box>
         </Box>
       </Grid>

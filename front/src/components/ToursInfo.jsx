@@ -1,12 +1,15 @@
 import { useState, useEffect, useContext } from "react";
 import { StateContext } from "../utils/StateContext";
 import { useParams } from "react-router-dom";
-import { Container, Grid, Typography, Card, CardMedia, CardContent, Box, Button, CssBaseline, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Container, Grid, Typography, Card, CardMedia, CardContent, Box, Button, CssBaseline, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, } from '@mui/material';
+import { Textarea } from "@mui/joy";
 import Modal from "@mui/joy/Modal";
 import { deleteData } from "../services/delete";
 import { useNavigate } from "react-router-dom";
 import EditToursInfo from "./EditToursInfo";
 import pilisImage2 from "../images/Castle2.jpg";
+import { getLogedInUser } from "../utils/auth/authenticate";
+import { Link } from "react-router-dom";
 
 function ToursInfo() {
   const [allTours, setAllTours] = useState([]);
@@ -36,6 +39,9 @@ function ToursInfo() {
     const category = categories.find((cat) => cat._id === categoryId);
     return category ? category.title : "Unknown Category";
   };
+
+  const user = getLogedInUser();
+  const isAdmin = user?.data.role === 'admin';
 
   return (
     <>
@@ -77,19 +83,38 @@ function ToursInfo() {
                         <strong>Price:</strong> ${ftours.price}
                       </Typography>
                       <Typography variant="body1" component="div" gutterBottom>
-                        <strong>Comment:</strong> {ftours.comment}
+                        <strong>Comment:</strong>
                       </Typography>
+                      <Textarea
+                        aria-label="Tour comment"
+                        minRows={3}
+                        maxRows={10}
+                        fontFamily="Arial, sans-serif"
+                        placeholder="Add your comments here"
+                        style={{ width: '100%', marginTop: '8px', padding: '8px' }}
+                        defaultValue={ftours.comment}
+                      />
                       <Typography variant="body1" component="div" gutterBottom>
                         <strong>Category:</strong> {getCategoryTitle(ftours.category)}
                       </Typography>
-                      <Box sx={{ marginTop: 2 }}>
-                        <Button variant="contained" color="primary" onClick={() => setOpen(true)} style={{ marginRight: 10 }}>
-                          Edit
-                        </Button>
-                        <Button variant="contained" color="secondary" onClick={() => setOpenDeleteDialog(true)}>
-                          Delete
-                        </Button>
-                      </Box>
+                      {isAdmin && (
+                        <Box sx={{ marginTop: 2 }}>
+                          <Button variant="contained" color="primary" onClick={() => setOpen(true)} style={{ marginRight: 10 }}>
+                            Edit
+                          </Button>
+                          <Button variant="contained" color="secondary" onClick={() => setOpenDeleteDialog(true)}>
+                            Delete
+                          </Button>
+                        </Box>
+                      )}
+                      {!isAdmin && (
+                        <Typography>
+                          <strong>
+                            If you want to participate in this tour, please <Link to="/login">log in</Link>.<br />
+                            If you want to book a tour <Link to="register">register</Link>.
+                          </strong>
+                        </Typography>
+                      )}
                     </Box>
                   </CardContent>
                 </Grid>

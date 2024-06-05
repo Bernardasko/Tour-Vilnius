@@ -5,7 +5,7 @@ export default function Cards({ tour }) {
   return (
     <Card sx={{ width: 300 }}>
       <CardMedia
-        sx={{ height: 120 }}
+        sx={{height: 160 }}
         image={tour.photo} 
         title={tour.title} 
       />

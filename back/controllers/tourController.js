@@ -16,8 +16,16 @@ exports.uploadImage = multer({
  });
 
  exports.getAllTours = async (req, res) => {
+  let searchParams = {};
+  if (req.query.title) {
+    searchParams.title = { $regex: req.query.title, $options: 'i' };
+  }
+  
+  if (req.query.dates) {
+    searchParams.dates = req.query.dates;
+  }
   try {
-    const tours = await Tour.find();
+    const tours = await Tour.find(searchParams);
     res.status(200).json({
       status: "success",
       results: tours.length,

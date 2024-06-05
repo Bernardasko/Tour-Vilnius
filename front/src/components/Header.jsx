@@ -8,7 +8,6 @@ import {
   Button,
   Menu,
   MenuItem,
-  MenuList,
   Drawer,
   List,
   ListItem,
@@ -18,9 +17,9 @@ import ExploreIcon from "@mui/icons-material/Explore";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link, useNavigate } from "react-router-dom";
 import { logout, getLogedInUser } from "../utils/auth/authenticate";
+import SearchBar from "./SearchBar";
 
 function Header() {
-  const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElTours, setAnchorElTours] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -37,13 +36,6 @@ function Header() {
     navigate("/");
   };
 
-  const openMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const closeMenu = () => {
-    setAnchorElNav(null);
-  };
-
   const openToursMenu = (event) => {
     setAnchorElTours(event.currentTarget);
   };
@@ -52,10 +44,7 @@ function Header() {
   };
 
   const toggleDrawer = (open) => (event) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
+    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
       return;
     }
     setDrawerOpen(open);
@@ -69,24 +58,24 @@ function Header() {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-        <ListItem button component={Link} to="/">
+        <ListItem component={Link} to="/">
           <ListItemText primary="Home" />
         </ListItem>
-        <ListItem button component={Link} to="/groups">
+        <ListItem component={Link} to="/groups">
           <ListItemText primary="Groups" />
         </ListItem>
-        <ListItem button component={Link} to="/solo">
+        <ListItem component={Link} to="/solo">
           <ListItemText primary="Solo" />
         </ListItem>
-        <ListItem button component={Link} to="/about">
+        <ListItem component={Link} to="/about">
           <ListItemText primary="About" />
         </ListItem>
         {loggedIn ? (
-          <ListItem button onClick={handleLogout}>
+          <ListItem onClick={handleLogout}>
             <ListItemText primary="Logout" />
           </ListItem>
         ) : (
-          <ListItem button component={Link} to="/login">
+          <ListItem component={Link} to="/login">
             <ListItemText primary="Login" />
           </ListItem>
         )}
@@ -97,22 +86,41 @@ function Header() {
   return (
     <AppBar position="static">
       <Toolbar>
-        <IconButton>
-          <ExploreIcon
-            fontSize="large"
-            edge="start"
-            color="inherit"
-            aria-label="logo"
-            sx={{ display: { xs: "none", md: "flex" } }}
-          />
+        <IconButton
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          sx={{ display: { xs: "none", md: "flex" } }}
+        >
+          <ExploreIcon fontSize="large" />
         </IconButton>
         <Typography
-          variant="h5"
+          variant="h6"
           component="div"
           sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}
         >
           Tour Vilnius
         </Typography>
+        <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={toggleDrawer(true)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Drawer
+            anchor="left"
+            open={drawerOpen}
+            onClose={toggleDrawer(false)}
+          >
+            {list}
+          </Drawer>
+        </Box>
+        <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <SearchBar />
+        </Box>
         <Box sx={{ display: { xs: "none", md: "flex" } }}>
           <Button color="inherit">
             <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
@@ -133,55 +141,26 @@ function Header() {
             <MenuItem component={Link} to="/groups">Groups</MenuItem>
             <MenuItem component={Link} to="/solo">Solo</MenuItem>
           </Menu>
-          <Button color="inherit">About</Button>
+          <Button color="inherit">
+            <Link to="/about" style={{ textDecoration: "none", color: "inherit" }}>
+              About
+            </Link>
+          </Button>
           {loggedIn ? (
             <Button color="inherit" onClick={handleLogout}>
               Logout
             </Button>
           ) : (
             <Button color="inherit">
-              <Link
-                to="/login"
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
+              <Link to="/login" style={{ textDecoration: "none", color: "inherit" }}>
                 Login
               </Link>
             </Button>
           )}
         </Box>
         <Box sx={{ display: { xs: "flex", md: "none" } }}>
-          <IconButton
-            fontSize="large"
-            edge="start"
-            color="inherit"
-            onClick={toggleDrawer(true)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Drawer
-            anchor="left"
-            open={drawerOpen}
-            onClose={toggleDrawer(false)}
-          >
-            {list}
-          </Drawer>
+          <SearchBar />
         </Box>
-        <IconButton>
-          <ExploreIcon
-            fontSize="large"
-            edge="start"
-            color="inherit"
-            aria-label="logo"
-            sx={{ display: { xs: "flex", md: "none" } }}
-          />
-        </IconButton>
-        <Typography
-          variant="h5"
-          component="div"
-          sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
-        >
-          Tour Vilnius
-        </Typography>
       </Toolbar>
     </AppBar>
   );
