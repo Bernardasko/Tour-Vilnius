@@ -14,10 +14,11 @@ const tourSchema = new mongoose.Schema({
     type: Number,
    
   },
-  dates: {
-    type: String,
-   
-  },
+   dates: [
+    {
+      type: String,
+    },
+  ],
   price: {
     type: Number,
   
@@ -32,7 +33,7 @@ const tourSchema = new mongoose.Schema({
   category: {
     type: mongoose.Schema.ObjectId,
     ref: "Category",
-  }
+  },
 });
 
 // tourSchema.methods.calculateAverageRating = function() {

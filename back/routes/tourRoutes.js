@@ -11,11 +11,11 @@ const { protect, restrictTo } = authControler;
 
 const router = express.Router();
 
-router.route("/").get(getAllTours).post(uploadImage.single("photo"), createTour);
+router.route("/").get(protect,getAllTours).post(protect,uploadImage.single("photo"), createTour);
 router.route("/:id")
-.get(getTour)
-.patch(uploadImage.single("photo"), updateTour)
-.delete(deleteTour);
+.get(protect, getTour)
+.patch(protect, uploadImage.single("photo"), updateTour)
+.delete(protect,deleteTour);
 
 
 module.exports = router;

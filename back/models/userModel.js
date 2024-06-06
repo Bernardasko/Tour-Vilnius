@@ -37,6 +37,12 @@ const userSchema = new mongoose.Schema({
     message: "Role must be one of: user, admin, editor",
     default: "user",
   },
+  tours: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "Tour",
+    },
+  ]
 });
 
 userSchema.pre("save", async function (next) {

@@ -1,5 +1,6 @@
-import {Box,Button, TextField, Typography, Select, MenuItem,
-} from "@mui/material";
+import { useState, useContext } from "react";
+import { StateContext } from "../utils/StateContext";
+import { Box, Button, TextField, Typography, Select, MenuItem } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
@@ -8,11 +9,10 @@ import { postData } from "../services/post";
 import { styled } from "@mui/material/styles";
 import dayjs from "dayjs";
 import { ModalClose, Sheet } from '@mui/joy';
-import { useContext } from "react";
-import { StateContext } from "../utils/StateContext";
 
 function TourForms() {
-   const {setUpdate, setOpen, categories} = useContext(StateContext);
+  const { setUpdate, setOpen, categories } = useContext(StateContext);
+  const [selectedDates, setSelectedDates] = useState([]);
 
   const {
     control,
@@ -32,8 +32,16 @@ function TourForms() {
     },
   });
 
+  const handleAddDate = (date) => {
+    setSelectedDates((prevDates) => [...prevDates, date]);
+  };
+
+  const handleRemoveDate = (index) => {
+    setSelectedDates((prevDates) => prevDates.filter((_, i) => i !== index));
+  };
+
   const formSubmitHandler = async (data) => {
-    data.dates = dayjs(data.dates).format("MM/DD/YYYY");
+    data.dates = selectedDates.map((date) => dayjs(date).format("MM/DD/YYYY"));
     try {
       await postData({ ...data, photo: data.photo[0] });
       setUpdate((update) => update + 1);
@@ -57,127 +65,133 @@ function TourForms() {
   });
 
   return (
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box
         component="form"
         onSubmit={handleSubmit(formSubmitHandler)}
         sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          maxWidth: 500,
+          mx: "auto",
+          mt: 3,
+        }}
+      >
+        <Sheet
+          variant="outlined"
+          sx={{
             display: "flex",
             flexDirection: "column",
             gap: 2,
-            maxWidth: 500,
-            mx: "auto",
-            mt: 3,
-        }}       
-      >
-        <Sheet
-              variant="outlined"
-              sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 2,
-                  borderRadius: 'md',
-                  p: 3,
-                  boxShadow: 'lg',
-                }}
-            >
-                <ModalClose variant="plain" sx={{ m: 1 }} />
-        <Typography variant="h4" component="h1" gutterBottom>
-          Create a New Tour
-        </Typography>
-        <TextField
-          label="Title"
-          name="title"
-          id="title"
-          autoComplete="title"
-          {...register("title", { required: true })}
-          error={!!errors.title}
-          helperText={errors.title?.message}
-        />
-        <Button
-          component="label"
-          role={undefined}
-          variant="contained"
-          tabIndex={-1}
-          startIcon={<CloudUploadIcon />}
+            borderRadius: 'md',
+            p: 3,
+            boxShadow: 'lg',
+          }}
         >
-          Upload file
-          <VisuallyHiddenInput
-            name="photo"
-            type="file"
-            {...register("photo")}
+          <ModalClose variant="plain" sx={{ m: 1 }} />
+          <Typography variant="h4" component="h1" gutterBottom>
+            Create a New Tour
+          </Typography>
+          <TextField
+            label="Title"
+            name="title"
+            id="title"
+            autoComplete="title"
+            {...register("title", { required: true })}
+            error={!!errors.title}
+            helperText={errors.title?.message}
           />
-        </Button>
-        <TextField
-          label="Duration hours"
-          name="duration"
-          type="number"
-          id="duration"
-          autoComplete="duration"
-          {...register("duration", { required: true })}
-          error={!!errors.duration}
-          helperText={errors.duration?.message}
-        />
-        <Controller
-          name="dates"
-          control={control}
-          render={({ field }) => (
-            <DatePicker
-              label="Date"
-              value={field.value}
-              format="MM/dd/yyyy"
-                onChange={(date) => field.onChange(date)}
-                renderInput={(params) => <TextField {...params} />}
-              required
+          <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
+          >
+            Upload file
+            <VisuallyHiddenInput
+              name="photo"
+              type="file"
+              {...register("photo")}
             />
-          )}
-        />
-        <TextField
-          label="Price"
-          name="price"
-          type="number"
-          id="price"
-          autoComplete="price"
-          {...register("price", { required: true })}
-          error={!!errors.price}
-          helperText={errors.price?.message}
-        />
-        <TextField
-          label="Comment"
-          name="comment"
-          id="comment"
-          autoComplete="comment"
-          {...register("comment", { required: true })}
-          error={!!errors.comment}
-          helperText={errors.comment?.message}
-          multiline
-          rows={4}
-        />
-        <Controller
-          name="category"
-          control={control}
-          render={({ field }) => (
-            <Select
-              {...field}
-              displayEmpty
-              fullWidth
-              onChange={(e) => field.onChange(e.target.value)}
-            >
-              <MenuItem value="" disabled>
-                Select Category
-              </MenuItem>
-              {categories.map((category) => (
-                <MenuItem key={category._id} value={category._id}>
-                  {category.title}
+          </Button>
+          <TextField
+            label="Duration hours"
+            name="duration"
+            type="number"
+            id="duration"
+            autoComplete="duration"
+            {...register("duration", { required: true })}
+            error={!!errors.duration}
+            helperText={errors.duration?.message}
+          />
+          <Controller
+            name="datePicker"
+            control={control}
+            render={({ field }) => (
+              <DatePicker
+                label="Select Date"
+                value={field.value}
+                onChange={(date) => handleAddDate(date)}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            )}
+          />
+          <ul>
+            {selectedDates.map((date, index) => (
+              <li key={index}>
+                {dayjs(date).format("MM/DD/YYYY")}
+                <Button onClick={() => handleRemoveDate(index)}>Remove</Button>
+              </li>
+            ))}
+          </ul>
+          <TextField
+            label="Price"
+            name="price"
+            type="number"
+            id="price"
+            autoComplete="price"
+            {...register("price", { required: true })}
+            error={!!errors.price}
+            helperText={errors.price?.message}
+          />
+          <TextField
+            label="Comment"
+            name="comment"
+            id="comment"
+            autoComplete="comment"
+            {...register("comment", { required: true })}
+            error={!!errors.comment}
+            helperText={errors.comment?.message}
+            multiline
+            rows={4}
+          />
+          <Controller
+            name="category"
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                displayEmpty
+                fullWidth
+                onChange={(e) => field.onChange(e.target.value)}
+              >
+                <MenuItem value="" disabled>
+                  Select Category
                 </MenuItem>
-              ))}
-            </Select>
-          )}
-        />
-        <Button type="submit" variant="contained" color="primary">
-          Submit
-        </Button>
-    </Sheet>
+                {categories.map((category) => (
+                  <MenuItem key={category._id} value={category._id}>
+                    {category.title}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+          />
+          <Button type="submit" variant="contained" color="primary">
+            Submit
+          </Button>
+        </Sheet>
       </Box>
     </LocalizationProvider>
   );

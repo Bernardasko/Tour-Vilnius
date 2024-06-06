@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { StateContext } from "../utils/StateContext";
 import { useParams } from "react-router-dom";
-import { Container, Grid, Typography, Card, CardMedia, CardContent, Box, Button, CssBaseline, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, } from '@mui/material';
+import { Container, Grid, Typography, Card, CardMedia, CardContent, Box, Button, CssBaseline, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Select, MenuItem } from '@mui/material';
 import { Textarea } from "@mui/joy";
 import Modal from "@mui/joy/Modal";
 import { deleteData } from "../services/delete";
@@ -77,8 +77,21 @@ function ToursInfo() {
                         <strong>Duration:</strong> {ftours.duration} days
                       </Typography>
                       <Typography variant="body1" component="div" gutterBottom>
-                        <strong>Dates:</strong> {ftours.dates}
+                        <strong>Dates:</strong>
                       </Typography>
+                      <Select
+                        displayEmpty
+                        fullWidth
+                        value=""
+                        onChange={() => { }}
+                        renderValue={() => 'Select Date'}
+                      >
+                        {ftours.dates.map((date, index) => (
+                          <MenuItem key={index} value={date}>
+                            {date}
+                          </MenuItem>
+                        ))}
+                      </Select>
                       <Typography variant="body1" component="div" gutterBottom>
                         <strong>Price:</strong> ${ftours.price}
                       </Typography>
@@ -111,7 +124,7 @@ function ToursInfo() {
                         <Typography>
                           <strong>
                             If you want to participate in this tour, please <Link to="/login">log in</Link>.<br />
-                            If you want to book a tour <Link to="register">register</Link>.
+                            If you want to book a tour <Link to="/"><Button variant="contained">Order</Button></Link>
                           </strong>
                         </Typography>
                       )}

@@ -16,6 +16,7 @@ export const getallData = async () => {
 
 export const getCategories = async () => {
     try {
+        authenticate();
         const response = await axios.get(API_URC);
         return response.data;
     } catch (error) {
