@@ -10,6 +10,7 @@ import EditToursInfo from "./EditToursInfo";
 import pilisImage2 from "../images/Castle2.jpg";
 import { getLogedInUser } from "../utils/auth/authenticate";
 import { Link } from "react-router-dom";
+import { postMyData } from "../services/post";
 
 function ToursInfo() {
   const [allTours, setAllTours] = useState([]);
@@ -30,6 +31,15 @@ function ToursInfo() {
       setOpenDeleteDialog(false);
     }
   };
+
+  const handleMyTours = async () => {
+    try {
+      const response = await postMyData(id);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
     setAllTours(tours);
@@ -124,7 +134,7 @@ function ToursInfo() {
                         <Typography>
                           <strong>
                             If you want to participate in this tour, please <Link to="/login">log in</Link>.<br />
-                            If you want to book a tour <Link to="/"><Button variant="contained">Order</Button></Link>
+                            If you want to book a tour <Link to="/"><Button onClick={handleMyTours} variant="contained">Order</Button></Link>
                           </strong>
                         </Typography>
                       )}

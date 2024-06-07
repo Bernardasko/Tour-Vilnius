@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
-import { getallData, getCategories } from '../services/get';
+import { getallData, getCategories, getUsers } from '../services/get';
 export const StateContext = createContext();
 
 export const StateProvider = ({ children }) => {
@@ -8,6 +8,7 @@ export const StateProvider = ({ children }) => {
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState("");
     const [update, setUpdate] = useState(0);
+    const [users, setUser] = useState([]);
 
     const handleOpen = () => {
         setOpen(true);
@@ -33,13 +34,28 @@ export const StateProvider = ({ children }) => {
         }
     }
 
+    //User
+    const fetchUser = async () => {
+        try {
+            const { data: { users } } = await getUsers();
+            const toursIds = users.map(user => user.tours.map(tour => tour._id));
+            console.log(toursIds);
+            setUser(users);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+   
+
     useEffect(() => {
         fetchData();
         fetchCategories();
+        fetchUser();
     }, [update])
 
     return (
-        <StateContext.Provider value={{ update, setUpdate, open, setOpen, tours, setTours, categories, setCategories, handleOpen}}>
+        <StateContext.Provider value={{ update, setUpdate, open, setOpen, tours, setTours, categories, setCategories, users, setUser, handleOpen}}>
             {children}
         </StateContext.Provider>
     )

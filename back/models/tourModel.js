@@ -34,6 +34,7 @@ const tourSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "Category",
   },
+  
 });
 
 // tourSchema.methods.calculateAverageRating = function() {
