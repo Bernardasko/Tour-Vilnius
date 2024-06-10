@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from 'react';
 import { getallData, getCategories, getUsers } from '../services/get';
+import { getLogedInUser, authenticate } from '../utils/auth/authenticate';
 export const StateContext = createContext();
 
 export const StateProvider = ({ children }) => {
@@ -45,8 +46,7 @@ export const StateProvider = ({ children }) => {
             console.log(error);
         }
     }
-
-   
+  
 
     useEffect(() => {
         fetchData();
@@ -55,7 +55,7 @@ export const StateProvider = ({ children }) => {
     }, [update])
 
     return (
-        <StateContext.Provider value={{ update, setUpdate, open, setOpen, tours, setTours, categories, setCategories, users, setUser, handleOpen}}>
+        <StateContext.Provider value={{ update, setUpdate, open, setOpen, tours, setTours, categories, setCategories, users, setUser, handleOpen,}}>
             {children}
         </StateContext.Provider>
     )

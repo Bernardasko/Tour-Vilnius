@@ -39,10 +39,16 @@ const userSchema = new mongoose.Schema({
   },
   tours: [
     {
-      type: mongoose.Schema.ObjectId,
-      ref: "Tour",
+      tourId: { 
+        type: mongoose.Schema.ObjectId, 
+        ref: "Tour"
+       },
+      date: {
+        type: String,
+      },
     },
-  ]
+  ],
+  
 });
 
 userSchema.pre("save", async function (next) {

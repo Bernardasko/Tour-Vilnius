@@ -1,8 +1,8 @@
 import axios from "axios";
+import { authenticate } from "../utils/auth/authenticate";
 const API_URL = import.meta.env.VITE_API_URL;
 const API_URC = import.meta.env.VITE_API_URC;
 const API_URS = import.meta.env.VITE_API_URS;
-import { authenticate } from "../utils/auth/authenticate";
 
 export const getallData = async () => {
     try {

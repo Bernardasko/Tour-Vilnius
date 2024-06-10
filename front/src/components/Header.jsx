@@ -67,6 +67,9 @@ function Header() {
         <ListItem component={Link} to="/solo">
           <ListItemText primary="Solo" />
         </ListItem>
+        <ListItem component={Link} to="/my-tours">
+          <ListItemText primary="My tours" />
+        </ListItem>
         <ListItem component={Link} to="/about">
           <ListItemText primary="About" />
         </ListItem>
@@ -140,6 +143,7 @@ function Header() {
           >
             <MenuItem component={Link} to="/groups">Groups</MenuItem>
             <MenuItem component={Link} to="/solo">Solo</MenuItem>
+            <MenuItem component={Link} to="/my-tours">My tours</MenuItem>
           </Menu>
           <Button color="inherit">
             <Link to="/about" style={{ textDecoration: "none", color: "inherit" }}>

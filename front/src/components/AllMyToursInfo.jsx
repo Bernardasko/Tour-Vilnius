@@ -1,24 +1,22 @@
 import { useState, useEffect, useContext } from "react";
 import { StateContext } from "../utils/StateContext";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Container, Grid, Typography, Card, CardMedia, CardContent, Box, Button, CssBaseline, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Select, MenuItem } from '@mui/material';
 import { Textarea } from "@mui/joy";
 import Modal from "@mui/joy/Modal";
 import { deleteData } from "../services/delete";
-import { useNavigate } from "react-router-dom";
 import EditToursInfo from "./EditToursInfo";
 import pilisImage2 from "../images/Castle2.jpg";
 import { getLogedInUser } from "../utils/auth/authenticate";
-import { Link } from "react-router-dom";
 import { postMyData } from "../services/post";
 
-function ToursInfo() {
-  const [allTours, setAllTours] = useState([]);
+function AllMyToursInfo() {
+  const [allMyTours, setAllMyTours] = useState([]);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedDates, setSelectedDates] = useState("");
   const { tours, categories, setUpdate, open, setOpen, users } = useContext(StateContext);
   const { id } = useParams();
-  const ftours = allTours.find((tour) => tour._id === id);
+  const ftours = allMyTours.find((tour) => tour._id === id);
   const navigate = useNavigate();
 
   const handleDelete = async () => {
@@ -43,7 +41,7 @@ function ToursInfo() {
   }
 
   useEffect(() => {
-    setAllTours(tours);
+    setAllMyTours(tours);
   }, [tours]);
 
   const getCategoryTitle = (categoryId) => {
@@ -53,6 +51,8 @@ function ToursInfo() {
 
   const user = getLogedInUser();
   const isAdmin = user?.data.role === 'admin';
+
+  const userDates = users.find(u => u._id === user?.data._id)?.dates || [];
 
   return (
     <>
@@ -88,9 +88,9 @@ function ToursInfo() {
                         <strong>Duration:</strong> {ftours.duration} days
                       </Typography>
                       <Typography variant="body1" component="div" gutterBottom>
-                        <strong>Dates:</strong>
+                        <strong>Dates:</strong> {userDates.join(', ')}
                       </Typography>
-                      <Select
+                      {/* <Select
                         displayEmpty
                         fullWidth
                         value={selectedDates}
@@ -102,7 +102,7 @@ function ToursInfo() {
                             {date}
                           </MenuItem>
                         ))}
-                      </Select>
+                      </Select> */}
                       <Typography variant="body1" component="div" gutterBottom>
                         <strong>Price:</strong> ${ftours.price}
                       </Typography>
@@ -130,14 +130,6 @@ function ToursInfo() {
                             Delete
                           </Button>
                         </Box>
-                      )}
-                      {!isAdmin && (
-                        <Typography>
-                          <strong>
-                            If you want to participate in this tour, please <Link to="/login">log in</Link>.<br />
-                            If you want to book a tour <Link to="/"><Button onClick={handleMyTours} variant="contained">Order</Button></Link>
-                          </strong>
-                        </Typography>
                       )}
                     </Box>
                   </CardContent>
@@ -177,4 +169,4 @@ function ToursInfo() {
   );
 }
 
-export default ToursInfo;
+export default AllMyToursInfo;
