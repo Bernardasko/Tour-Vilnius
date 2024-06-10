@@ -13,9 +13,9 @@ function AllMyTours() {
     const loggedInUser = getLogedInUser();
     const isAdmin = loggedInUser?.data.role === 'admin';
 
-    useEffect(() => {
-        console.log(users);
-    }, [users]);
+    // useEffect(() => {
+    //     console.log(users);
+    // }, [users]);
 
     const currentUser = users.find(user => user._id === loggedInUser?.data._id);
 

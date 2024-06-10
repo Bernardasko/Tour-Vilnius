@@ -1,7 +1,24 @@
 import { useState, useEffect, useContext } from "react";
 import { StateContext } from "../utils/StateContext";
 import { useParams, useNavigate } from "react-router-dom";
-import { Container, Grid, Typography, Card, CardMedia, CardContent, Box, Button, CssBaseline, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Select, MenuItem } from '@mui/material';
+import {
+  Container,
+  Grid,
+  Typography,
+  Card,
+  CardMedia,
+  CardContent,
+  Box,
+  Button,
+  CssBaseline,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import { Textarea } from "@mui/joy";
 import Modal from "@mui/joy/Modal";
 import { deleteData } from "../services/delete";
@@ -14,7 +31,8 @@ function AllMyToursInfo() {
   const [allMyTours, setAllMyTours] = useState([]);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedDates, setSelectedDates] = useState("");
-  const { tours, categories, setUpdate, open, setOpen, users } = useContext(StateContext);
+  const { tours, categories, setUpdate, open, setOpen, users } =
+    useContext(StateContext);
   const { id } = useParams();
   const ftours = allMyTours.find((tour) => tour._id === id);
   const navigate = useNavigate();
@@ -38,7 +56,7 @@ function AllMyToursInfo() {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     setAllMyTours(tours);
@@ -50,9 +68,14 @@ function AllMyToursInfo() {
   };
 
   const user = getLogedInUser();
-  const isAdmin = user?.data.role === 'admin';
+  const isAdmin = user?.data.role === "admin";
 
-  const userDates = users.find(u => u._id === user?.data._id)?.dates || [];
+  const loggedInUser = getLogedInUser();
+const userId = loggedInUser?.data._id;
+
+const specificUser = users.find((user) => user._id === userId);
+
+const userTours = specificUser ? specificUser.tours : [];
 
   return (
     <>
@@ -61,13 +84,13 @@ function AllMyToursInfo() {
         <Box
           style={{
             backgroundImage: `url(${pilisImage2})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            padding: '20px 0',
-            height: '93vh',
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            padding: "20px 0",
+            height: "93vh",
           }}
         >
-          <Container style={{ maxWidth: '940px', marginTop: 20, padding: 0 }}>
+          <Container style={{ maxWidth: "940px", marginTop: 20, padding: 0 }}>
             <Card>
               <Grid container>
                 <Grid item xs={12} md={6}>
@@ -75,7 +98,7 @@ function AllMyToursInfo() {
                     component="img"
                     image={ftours.photo}
                     alt="Photo"
-                    style={{ height: '100%', width: '100%' }}
+                    style={{ height: "100%", width: "100%" }}
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -87,9 +110,12 @@ function AllMyToursInfo() {
                       <Typography variant="body1" component="div" gutterBottom>
                         <strong>Duration:</strong> {ftours.duration} days
                       </Typography>
-                      <Typography variant="body1" component="div" gutterBottom>
-                        <strong>Dates:</strong> {userDates.join(', ')}
-                      </Typography>
+                      {userTours.map((tour, index) => (
+  <Typography key={index} variant="body1">
+    <strong>Dates:</strong> {tour.date}
+  </Typography>
+))}
+
                       {/* <Select
                         displayEmpty
                         fullWidth
@@ -115,18 +141,32 @@ function AllMyToursInfo() {
                         maxRows={10}
                         fontFamily="Arial, sans-serif"
                         placeholder="Add your comments here"
-                        style={{ width: '100%', marginTop: '8px', padding: '8px' }}
+                        style={{
+                          width: "100%",
+                          marginTop: "8px",
+                          padding: "8px",
+                        }}
                         defaultValue={ftours.comment}
                       />
                       <Typography variant="body1" component="div" gutterBottom>
-                        <strong>Category:</strong> {getCategoryTitle(ftours.category)}
+                        <strong>Category:</strong>{" "}
+                        {getCategoryTitle(ftours.category)}
                       </Typography>
                       {isAdmin && (
                         <Box sx={{ marginTop: 2 }}>
-                          <Button variant="contained" color="primary" onClick={() => setOpen(true)} style={{ marginRight: 10 }}>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => setOpen(true)}
+                            style={{ marginRight: 10 }}
+                          >
                             Edit
                           </Button>
-                          <Button variant="contained" color="secondary" onClick={() => setOpenDeleteDialog(true)}>
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={() => setOpenDeleteDialog(true)}
+                          >
                             Delete
                           </Button>
                         </Box>

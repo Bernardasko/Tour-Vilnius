@@ -6,7 +6,7 @@ import RegisterPage from './pages/RegisterPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ToursInfoPages from './pages/ToursInfoPages';
 import AllMyToursPages from './pages/AllMyToursPages';
-import AllMyToursInfoPages from './pages/AllMyToursInfoPages'; // Fixed path
+import AllMyToursInfoPages from './pages/AllMyToursInfoPages';
 
 function App() {
   return (

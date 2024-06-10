@@ -39,8 +39,7 @@ export const StateProvider = ({ children }) => {
     const fetchUser = async () => {
         try {
             const { data: { users } } = await getUsers();
-            const toursIds = users.map(user => user.tours.map(tour => tour._id));
-            console.log(toursIds);
+            console.log(users);
             setUser(users);
         } catch (error) {
             console.log(error);
