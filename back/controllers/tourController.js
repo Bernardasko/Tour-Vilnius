@@ -103,6 +103,53 @@ exports.createMyTours = async (req, res) => {
     res.status(201).json({
       status: "success",
       data: null,
+      message: "Tours created successfully",
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err.message,
+    });
+  }
+};
+
+exports.deleteMyTours = async (req, res) => {
+  try {
+    const tourId = req.params.tourId;
+    const userId = req.user._id;
+
+    await User.findByIdAndUpdate(userId, {
+      $pull: { tours: { tourId } }
+    });
+
+    res.status(204).json({
+      status: "success",
+      data: null,
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err.message,
+    });
+  }
+};
+
+exports.updateMyTour = async (req, res) => {
+  try {
+    const tourId = req.params.tourId;
+    const userId = req.user._id;
+    const { date } = req.body;
+
+    await User.findByIdAndUpdate(userId, {
+      $pull: { tours: { tourId } }
+    });
+    await User.findByIdAndUpdate(userId, {
+      $push: { tours: { tourId, date } }
+    });
+
+    res.status(204).json({
+      status: "success",
+      data: null,
     });
   } catch (err) {
     res.status(400).json({

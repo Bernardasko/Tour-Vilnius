@@ -2,7 +2,7 @@ const express = require("express");
 const tourControler = require("../controllers/tourController");
 const authControler = require("../controllers/authController");
 
-const { getAllTours, getTour, createTour, updateTour, deleteTour, uploadImage, createMyTours } =
+const { getAllTours, getTour, createTour, updateTour, deleteTour, uploadImage, createMyTours, deleteMyTours, updateMyTour } =
     tourControler;
 
 const { signup, login } = authControler;
@@ -17,7 +17,12 @@ router.route("/:id")
 .patch( uploadImage.single("photo"), updateTour)
 .delete(deleteTour);
 
-router.route("/my-tours/:tourId").post(protect,createMyTours);
+router.route("/my-tours/:tourId")
+.post(protect,createMyTours)
+.delete(protect,deleteMyTours)
+.patch(protect,updateMyTour);
+
+
 
 
 module.exports = router;

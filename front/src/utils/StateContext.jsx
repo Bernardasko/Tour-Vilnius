@@ -5,6 +5,7 @@ export const StateContext = createContext();
 
 export const StateProvider = ({ children }) => {
     const [open, setOpen] = useState(false);
+    const [opens, setOpens] = useState(false);
     const [tours, setTours] = useState([]);
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState("");
@@ -13,6 +14,10 @@ export const StateProvider = ({ children }) => {
 
     const handleOpen = () => {
         setOpen(true);
+    }
+    
+    const handleOpens = () => {
+        setOpens(true);
     }
 
     //Tours
@@ -54,7 +59,7 @@ export const StateProvider = ({ children }) => {
     }, [update])
 
     return (
-        <StateContext.Provider value={{ update, setUpdate, open, setOpen, tours, setTours, categories, setCategories, users, setUser, handleOpen,}}>
+        <StateContext.Provider value={{ update, setUpdate, open, setOpen, tours, setTours, categories, setCategories, users, setUser, handleOpen,opens, setOpens, handleOpens}}>
             {children}
         </StateContext.Provider>
     )

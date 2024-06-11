@@ -13,6 +13,8 @@ function Home() {
 
   const user = getLogedInUser();
   const isAdmin = user?.data.role === 'admin';
+
+  
   return (
     <>
       <CssBaseline />

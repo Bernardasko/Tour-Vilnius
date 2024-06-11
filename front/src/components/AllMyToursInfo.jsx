@@ -16,13 +16,11 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Select,
-  MenuItem,
 } from "@mui/material";
 import { Textarea } from "@mui/joy";
 import Modal from "@mui/joy/Modal";
-import { deleteData } from "../services/delete";
-import EditToursInfo from "./EditToursInfo";
+import { deleteMyData } from "../services/delete";
+import AllMyToursEdit from "./AllMyToursEdit";
 import pilisImage2 from "../images/Castle2.jpg";
 import { getLogedInUser } from "../utils/auth/authenticate";
 import { postMyData } from "../services/post";
@@ -39,9 +37,9 @@ function AllMyToursInfo() {
 
   const handleDelete = async () => {
     try {
-      await deleteData(id);
+      await deleteMyData(id);
       setUpdate((update) => update + 1);
-      navigate("/");
+      navigate("/my-tours");
     } catch (error) {
       console.log(error);
     } finally {
@@ -49,14 +47,14 @@ function AllMyToursInfo() {
     }
   };
 
-  const handleMyTours = async () => {
-    try {
-      const response = await postMyData(id, { date: selectedDates });
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleMyTours = async () => {
+  //   try {
+  //     const response = await postMyData(id, { date: selectedDates });
+  //     console.log(response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   useEffect(() => {
     setAllMyTours(tours);
@@ -71,11 +69,15 @@ function AllMyToursInfo() {
   const isAdmin = user?.data.role === "admin";
 
   const loggedInUser = getLogedInUser();
-const userId = loggedInUser?.data._id;
+  const userId = loggedInUser?.data._id;
 
-const specificUser = users.find((user) => user._id === userId);
+  const specificUser = users.find((user) => user._id === userId);
+  const userTours = specificUser ? specificUser.tours : [];
 
-const userTours = specificUser ? specificUser.tours : [];
+  // Filter to get the dates for the specific tour
+  const tourDates = userTours
+    .filter((tour) => tour.tourId._id === id)
+    .map((tour) => tour.date);
 
   return (
     <>
@@ -110,25 +112,13 @@ const userTours = specificUser ? specificUser.tours : [];
                       <Typography variant="body1" component="div" gutterBottom>
                         <strong>Duration:</strong> {ftours.duration} days
                       </Typography>
-                      {userTours.map((tour, index) => (
-  <Typography key={index} variant="body1">
-    <strong>Dates:</strong> {tour.date}
-  </Typography>
-))}
-
-                      {/* <Select
-                        displayEmpty
-                        fullWidth
-                        value={selectedDates}
-                        onChange={(e) => setSelectedDates(e.target.value)}
-                        renderValue={() => selectedDates || 'Select Date'}
-                      >
-                        {ftours.dates.map((date, index) => (
-                          <MenuItem key={index} value={date}>
-                            {date}
-                          </MenuItem>
+                      <Typography variant="body1" component="div" gutterBottom>
+                        {tourDates.map((date, index) => (
+                          <Typography key={index} variant="body1">
+                            <strong>Dates:</strong> {date}
+                          </Typography>
                         ))}
-                      </Select> */}
+                      </Typography>
                       <Typography variant="body1" component="div" gutterBottom>
                         <strong>Price:</strong> ${ftours.price}
                       </Typography>
@@ -152,7 +142,7 @@ const userTours = specificUser ? specificUser.tours : [];
                         <strong>Category:</strong>{" "}
                         {getCategoryTitle(ftours.category)}
                       </Typography>
-                      {isAdmin && (
+                     
                         <Box sx={{ marginTop: 2 }}>
                           <Button
                             variant="contained"
@@ -170,7 +160,7 @@ const userTours = specificUser ? specificUser.tours : [];
                             Delete
                           </Button>
                         </Box>
-                      )}
+                    
                     </Box>
                   </CardContent>
                 </Grid>
@@ -181,7 +171,7 @@ const userTours = specificUser ? specificUser.tours : [];
       )}
       <Modal open={open} onClose={() => setOpen(false)}>
         <div>
-          <EditToursInfo tour={ftours} />
+          <AllMyToursEdit tour={ftours} />
         </div>
       </Modal>
       <Dialog
