@@ -24,6 +24,7 @@ import AllMyToursEdit from "./AllMyToursEdit";
 import pilisImage2 from "../images/Castle2.jpg";
 import { getLogedInUser } from "../utils/auth/authenticate";
 import { postMyData } from "../services/post";
+import AddCommentRating from "./AddCommentRating";
 
 function AllMyToursInfo() {
   const [allMyTours, setAllMyTours] = useState([]);
@@ -167,6 +168,9 @@ function AllMyToursInfo() {
               </Grid>
             </Card>
           </Container>
+            <div style={ {display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: "20px",  }}>
+           <AddCommentRating tour={ftours} />
+          </div>
         </Box>
       )}
       <Modal open={open} onClose={() => setOpen(false)}>

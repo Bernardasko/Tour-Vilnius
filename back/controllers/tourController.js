@@ -138,13 +138,13 @@ exports.updateMyTour = async (req, res) => {
   try {
     const tourId = req.params.tourId;
     const userId = req.user._id;
-    const { date } = req.body;
+    const { date, rating, comment } = req.body;
 
     await User.findByIdAndUpdate(userId, {
       $pull: { tours: { tourId } }
     });
     await User.findByIdAndUpdate(userId, {
-      $push: { tours: { tourId, date } }
+      $push: { tours: { tourId, date, rating, comment } }
     });
 
     res.status(204).json({

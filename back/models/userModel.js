@@ -46,6 +46,12 @@ const userSchema = new mongoose.Schema({
       date: {
         type: String,
       },
+      rating: {
+        type: Number,
+      },
+      comment: {
+        type: String,
+      },
     },
   ],
   

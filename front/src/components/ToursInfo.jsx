@@ -11,6 +11,8 @@ import pilisImage2 from "../images/Castle2.jpg";
 import { getLogedInUser } from "../utils/auth/authenticate";
 import { Link } from "react-router-dom";
 import { postMyData } from "../services/post";
+import CommentRatingDisplay from "./CommentRatingCards";
+
 
 function ToursInfo() {
   const [allTours, setAllTours] = useState([]);
@@ -145,6 +147,7 @@ function ToursInfo() {
               </Grid>
             </Card>
           </Container>
+          <CommentRatingDisplay users={users} />
         </Box>
       )}
       <Modal open={open} onClose={() => setOpen(false)}>
