@@ -1,14 +1,14 @@
 import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { useState, useEffect, useContext } from "react";
+import { useContext } from "react";
 import { StateContext } from "../utils/StateContext";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { margin, width } from '@mui/system';
 
 const CommentRatingDisplay = () => {
-  
-  const { users, tours } = useContext(StateContext);
-  console.log(users);
+  const { id } = useParams();
+  const { users } = useContext(StateContext);
 
   const labels = {
     0.5: 'Useless',
@@ -23,28 +23,44 @@ const CommentRatingDisplay = () => {
     5: 'Excellent+',
   };
 
+  const filteredUserTours = users.map(user => ({
+    ...user,
+    tours: user.tours.filter(tour => tour.tourId._id === id)
+  }));
+
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-        {users.map((user) => (
-            tours.map ((tour) => (
-                
-      <Typography item key={tour._id}  variant="h6" gutterBottom>
-        Your Comment
-      </Typography>
-            ))            
-        ))}
-          
-    
-      <Typography variant="body1">{users.comment}</Typography>
-      <Typography variant="h6" gutterBottom>
-        Your Rating
-      </Typography>
-      <Rating
-        value={users.rating}
-        precision={0.5}
-        readOnly
-      />
-      <Typography variant="body1">{labels[users.rating]}</Typography>
+    <Box>
+      {filteredUserTours.map((user) => (
+        user.tours.map((tour, index) => (
+          <Box 
+            key={index} 
+            style={{
+              width: '500px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              justifyContent: 'center',
+              padding: '20px',
+              margin: 'auto',
+              backgroundColor: '#f5f5f5',
+              borderRadius: '8px',
+            }}
+          >
+            <Typography variant="body1" gutterBottom>
+              Comment: {tour.comment}
+            </Typography>
+            <Typography variant="h6" gutterBottom>
+              Your Rating
+            </Typography>
+            <Rating
+              value={tour.rating}
+              precision={0.5}
+              readOnly
+            />
+            <Typography variant="body1">{labels[tour.rating]}</Typography>
+          </Box>
+        ))
+      ))}
     </Box>
   );
 };

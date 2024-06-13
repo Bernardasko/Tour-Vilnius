@@ -134,20 +134,48 @@ exports.deleteMyTours = async (req, res) => {
   }
 };
 
+// exports.updateMyTour = async (req, res) => {
+//   try {
+//     const tourId = req.params.tourId;
+//     const userId = req.user._id;
+//     const { date  } = req.body;
+
+//     await User.findByIdAndUpdate(userId, {
+//       $pull: { tours: { tourId } }
+//     });
+//     await User.findByIdAndUpdate(userId, {
+//       $push: { tours: { tourId, date  } }
+//     });
+
+//     res.status(204).json({
+//       status: "success",
+//       data: null,
+//     });
+//   } catch (err) {
+//     res.status(400).json({
+//       status: "fail",
+//       message: err.message,
+//     });
+//   }
+// };
+
 exports.updateMyTour = async (req, res) => {
   try {
     const tourId = req.params.tourId;
     const userId = req.user._id;
     const { date, rating, comment } = req.body;
 
-    await User.findByIdAndUpdate(userId, {
-      $pull: { tours: { tourId } }
-    });
-    await User.findByIdAndUpdate(userId, {
-      $push: { tours: { tourId, date, rating, comment } }
-    });
+    const updateData = {};
+    if (date !== undefined) updateData["tours.$.date"] = date;
+    if (rating !== undefined) updateData["tours.$.rating"] = rating;
+    if (comment !== undefined) updateData["tours.$.comment"] = comment;
 
-    res.status(204).json({
+    await User.updateOne(
+      { _id: userId, "tours.tourId": tourId },
+      { $set: updateData }
+    );
+
+    res.status(200).json({
       status: "success",
       data: null,
     });
@@ -158,6 +186,7 @@ exports.updateMyTour = async (req, res) => {
     });
   }
 };
+
 
 exports.updateTour = async (req, res) => {
   try {

@@ -12,7 +12,6 @@ const router = express.Router();
 router.route("/").get(protect, getAllUsers);
 
 
-
 router.route("/signup").post(signup);
 router.route("/login").post(login);
 

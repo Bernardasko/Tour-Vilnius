@@ -4,13 +4,13 @@ import { Link } from 'react-router-dom';
 export default function AllMyCards({ tour }) {
     console.log(tour);
     return (
-        <Card key={tour._id} sx={{ width: 300 }}>
+        <Card key={tour._id} sx={{ width: 300, minHeight: 330 }}>
             <CardMedia
-                sx={{ height: 160 }}
+                sx={{ height: 170 }}
                 image={tour.tourId.photo}
                 title={tour.tourId.title}
             />
-            <CardContent>
+            <CardContent sx={{ textAlign: "center", padding: 1, marginBottom: 3 }}>
                 <Typography gutterBottom variant="h5" component="div">
                     {tour.tourId.title}
                 </Typography>

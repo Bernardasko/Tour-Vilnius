@@ -39,6 +39,7 @@ function ToursInfo() {
     try {
       const response = await postMyData(id, { date: selectedDates });
       console.log(response);
+      setUpdate((update) => update + 1);
     } catch (error) {
       console.log(error);
     }
@@ -66,7 +67,7 @@ function ToursInfo() {
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             padding: '20px 0',
-            height: '93vh',
+            height: '100%',
           }}
         >
           <Container style={{ maxWidth: '940px', marginTop: 20, padding: 0 }}>
@@ -118,7 +119,7 @@ function ToursInfo() {
                         fontFamily="Arial, sans-serif"
                         placeholder="Add your comments here"
                         style={{ width: '100%', marginTop: '8px', padding: '8px' }}
-                        defaultValue={ftours.comment}
+                        value={ftours.comment}
                       />
                       <Typography variant="body1" component="div" gutterBottom>
                         <strong>Category:</strong> {getCategoryTitle(ftours.category)}
@@ -137,7 +138,7 @@ function ToursInfo() {
                         <Typography>
                           <strong>
                             If you want to participate in this tour, please <Link to="/login">log in</Link>.<br />
-                            If you want to book a tour <Link to="/"><Button onClick={handleMyTours} variant="contained">Order</Button></Link>
+                            If you want to book a tour, please select dates<Link to="/"><Button onClick={handleMyTours} variant="contained">Order</Button></Link>
                           </strong>
                         </Typography>
                       )}
@@ -147,12 +148,14 @@ function ToursInfo() {
               </Grid>
             </Card>
           </Container>
-          <CommentRatingDisplay users={users} />
+          <div style={ {display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: "20px",  }}>
+          <CommentRatingDisplay  users={users} />
+          </div>
         </Box>
       )}
       <Modal open={open} onClose={() => setOpen(false)}>
         <div>
-          <EditToursInfo tour={ftours} />
+          <EditToursInfo tour={ftours} setUpdate={setUpdate} />
         </div>
       </Modal>
       <Dialog

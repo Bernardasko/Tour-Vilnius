@@ -90,7 +90,7 @@ function AllMyToursInfo() {
             backgroundSize: "cover",
             backgroundPosition: "center",
             padding: "20px 0",
-            height: "93vh",
+            height: "100%",
           }}
         >
           <Container style={{ maxWidth: "940px", marginTop: 20, padding: 0 }}>

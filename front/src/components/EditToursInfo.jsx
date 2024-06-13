@@ -90,6 +90,8 @@ function EditToursInfo({ tour }) {
           flexDirection: "column",
           gap: 2,
           maxWidth: 500,
+          height: '90vh',
+          overflowY: "auto",
           mx: "auto",
           mt: 3,
         }}

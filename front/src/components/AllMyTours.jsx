@@ -8,7 +8,7 @@ import Modal from '@mui/joy/Modal';
 import { getLogedInUser } from "../utils/auth/authenticate";
 
 function AllMyTours() {
-    const { open, setOpen, users, setUpdate } = useContext(StateContext);
+    const { open, setOpen, users } = useContext(StateContext);
 
     const loggedInUser = getLogedInUser();
     const isAdmin = loggedInUser?.data.role === 'admin';
