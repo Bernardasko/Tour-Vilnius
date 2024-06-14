@@ -9,7 +9,7 @@ const {getAllUsers, getUser, createUser, updateUser, deleteUser} = userControler
 
 
 const router = express.Router();
-router.route("/").get(protect, getAllUsers);
+router.route("/").get(getAllUsers);
 
 
 router.route("/signup").post(signup);

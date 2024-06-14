@@ -1,4 +1,5 @@
 import axios from "axios";
+import { authenticate } from "../utils/auth/authenticate";
 const API_URL = import.meta.env.VITE_API_URL;
 const API_URC = import.meta.env.VITE_API_URC;
 const API_ALL = import.meta.env.VITE_API_ALL;
@@ -20,6 +21,7 @@ export const updateCategories = async (id, data) => {
 };
 
 export const updateMyData = async (id, data) => {
+  authenticate();
   const response = await axios.patch(`${API_ALL}/${id}`, data);
   return response.data;
 };

@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import { useContext } from "react";
 import { StateContext } from "../utils/StateContext";
 import { useParams } from "react-router-dom";
-import { margin, width } from '@mui/system';
 
 const CommentRatingDisplay = () => {
   const { id } = useParams();
@@ -23,10 +22,18 @@ const CommentRatingDisplay = () => {
     5: 'Excellent+',
   };
 
+  // Filter users who have tours with the given tourId
   const filteredUserTours = users.map(user => ({
     ...user,
     tours: user.tours.filter(tour => tour.tourId._id === id)
-  }));
+  })).filter(user => user.tours.length > 0);
+
+  // Calculate the average rating of all filtered tours
+  const averageRating = () => {
+    const allRatings = filteredUserTours.flatMap(user => user.tours.map(tour => tour.rating));
+    const sum = allRatings.reduce((a, b) => a + b, 0);
+    return allRatings.length > 0 ? (sum / allRatings.length).toFixed(1) : 0;
+  };
 
   return (
     <Box>
@@ -34,7 +41,7 @@ const CommentRatingDisplay = () => {
         user.tours.map((tour, index) => (
           <Box 
             key={index} 
-            style={{
+            sx={{
               width: '500px',
               display: 'flex',
               flexDirection: 'column',
@@ -44,6 +51,7 @@ const CommentRatingDisplay = () => {
               margin: 'auto',
               backgroundColor: '#f5f5f5',
               borderRadius: '8px',
+              mb: 2,
             }}
           >
             <Typography variant="body1" gutterBottom>
@@ -52,15 +60,20 @@ const CommentRatingDisplay = () => {
             <Typography variant="h6" gutterBottom>
               Your Rating
             </Typography>
+            {/* Display the rating using the Rating component */}
             <Rating
               value={tour.rating}
               precision={0.5}
               readOnly
             />
+            {/* Display the label corresponding to the rating */}
             <Typography variant="body1">{labels[tour.rating]}</Typography>
           </Box>
         ))
       ))}
+      <Typography variant="body1" sx={{ mt: 2 }}>
+        Average Rating: {averageRating()}
+      </Typography>
     </Box>
   );
 };
